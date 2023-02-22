@@ -33,6 +33,14 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    void _scrollDown() {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard'),
@@ -94,27 +102,33 @@ class _DashboardState extends State<Dashboard> {
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: Colors.black))),
                   child: TextFormField(
-                    onEditingComplete: () {
+                    onEditingComplete: () async {
                       setState(() {
                         _messages.add(ChatMessage(text: controller.text, chatMessageType: ChatMessageType.user));
                         isLoading = true;
                       });
                       var input = controller.text;
                       controller.clear();
-                      Future.delayed(Duration(milliseconds: 50)).then((value) => _scrollDown());
-                      openai.chatGPT(input).then((value) {
+                      Future.delayed(
+                        Duration(milliseconds: 50),
+                        () => _scrollDown(),
+                      );
+                      await openai.chatGPT(input).then((value) {
                         setState(() {
                           isLoading = false;
                           _messages.add(ChatMessage(text: value, chatMessageType: ChatMessageType.bot));
                         });
                       });
                       controller.clear();
-                      Future.delayed(Duration(milliseconds: 50)).then((value) => _scrollDown());
+                      Future.delayed(
+                        Duration(milliseconds: 50),
+                        () => _scrollDown(),
+                      );
                     },
                     controller: controller,
                     decoration: InputDecoration(
                         suffixIcon: IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         setState(() {
                           _messages.add(ChatMessage(text: controller.text, chatMessageType: ChatMessageType.user));
                           isLoading = true;
@@ -122,7 +136,7 @@ class _DashboardState extends State<Dashboard> {
                         var input = controller.text;
                         controller.clear();
                         Future.delayed(Duration(milliseconds: 50)).then((value) => _scrollDown());
-                        openai.chatGPT(input).then((value) {
+                        await openai.chatGPT(input).then((value) {
                           setState(() {
                             isLoading = false;
                             _messages.add(ChatMessage(text: value, chatMessageType: ChatMessageType.bot));
@@ -140,14 +154,6 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
       ),
-    );
-  }
-
-  void _scrollDown() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
     );
   }
 }
