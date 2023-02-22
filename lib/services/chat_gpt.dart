@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class OpenAI {
-  // var api = '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';
-  var api = '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';
+  var api = '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';
+  // var api = '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';
 
   Future<String> chatGPT(String prompt) async {
     var url = Uri.https('api.openai.com', '/v1/completions');

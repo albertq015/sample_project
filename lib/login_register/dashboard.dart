@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:sampleproject/login_register/update_credentials_page.dart';
 import 'package:sampleproject/services/chat_gpt.dart';
+import 'package:http/http.dart' as http;
 
 import '../model/model.dart';
 
 class Dashboard extends StatefulWidget {
+  int? userId;
   String? username;
-  Dashboard({Key? key, this.username}) : super(key: key);
+  String? password;
+  String? name;
+  Dashboard({Key? key, this.username, this.password, this.name, this.userId}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -31,6 +36,23 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UpdateCredentialsPage(
+                      name: widget.name,
+                      password: widget.password,
+                      username: widget.username,
+                      userId: widget.userId,
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.edit))
+        ],
       ),
       body: SafeArea(
         child: Center(
@@ -44,7 +66,7 @@ class _DashboardState extends State<Dashboard> {
                     child: Column(
                       children: [
                         const Text('Welcome', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-                        Text(widget.username!, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                        Text(widget.name!, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
                       ],
                     )),
                 Expanded(

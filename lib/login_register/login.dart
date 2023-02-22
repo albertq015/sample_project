@@ -68,10 +68,16 @@ class _LoginPageState extends State<LoginPage> {
                 if (_formKey.currentState!.validate()) {
                   http.Response response = await login.login(userController.text, passController.text);
                   if (jsonDecode(response.body)['name'] != '') {
-                    print(jsonDecode(response.body)['name']);
+                    print(jsonDecode(response.body));
+
                     Navigator.pushReplacement(context, MaterialPageRoute(
                       builder: (context) {
-                        return Dashboard(username: jsonDecode(response.body)['name']);
+                        return Dashboard(
+                          userId: jsonDecode(response.body)['userId'],
+                          name: jsonDecode(response.body)['name'],
+                          username: jsonDecode(response.body)['username'],
+                          password: jsonDecode(response.body)['password'],
+                        );
                       },
                     ));
                   } else {
