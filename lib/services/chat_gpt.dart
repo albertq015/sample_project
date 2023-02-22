@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class OpenAI {
-  var api = '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';
-  // var api = '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';
+  var api = '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'; //you can get/generate key at https://platform.openai.com/account/api-keys,
+  //create an account to login
 
   Future<String> chatGPT(String prompt) async {
     var url = Uri.https('api.openai.com', '/v1/completions');
